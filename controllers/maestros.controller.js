@@ -12,11 +12,11 @@ export const getMaestros = async (req, res) => {
 };
 
 // 🔹 Agregar maestro nuevo
-export const createMaestro = async (req, res) => {
+export const createMaestros = async (req, res) => {
   const { nombre, edad, sexo, estatus, materiaAsignada } = req.body;
 
-  if (!nombre || !carrera || !grado) {
-    return res.status(400).json({ ok: false, error: "Faltan campos: nombre carrera y grado son requeridos" });
+  if (!nombre || !edad || !sexo || estatus || ) {
+    return res.status(400).json({ ok: false, error: "Faltan campos requeridos" });
   }
 
   try {
