@@ -21,7 +21,7 @@ export const createMaestros = async (req, res) => {
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO maestros (nombre, edad, sexo,estatus,materiaAsignada) VALUES (?, ?, ?, ? ,?, ? )",
+      "INSERT INTO maestros (nombre, edad, sexo,estatus,materiaAsignada) VALUES (?, ?, ?, ? ,? )",
       [nombre, edad, sexo, estatus, materiaAsignada]
     );
     res.json({ ok: true, id: result.insertId, mensaje: "Maestro agregado correctamente" });
