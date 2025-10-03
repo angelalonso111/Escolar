@@ -15,7 +15,7 @@ export const getMaterias = async (req, res) => {
 export const createMateria = async (req, res) => {
   const { nombre, carrera, grado } = req.body;
 
-  if (!nombre || !clave) {
+  if (!nombre || !carrera || !grado) {
     return res.status(400).json({ ok: false, error: "Faltan campos: nombre carrera y grado son requeridos" });
   }
 
