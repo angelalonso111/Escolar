@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import alumnosRoutes from "./routes/alumnos.routes.js";
+import materiasRoutes from "./routes/materias.routes.js";
 
 dotenv.config();
 
@@ -12,8 +13,9 @@ app.get("/ping", (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
-// Rutas de alumnos
+// Rutas principales
 app.use("/alumnos", alumnosRoutes);
+app.use("/materias", materiasRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
