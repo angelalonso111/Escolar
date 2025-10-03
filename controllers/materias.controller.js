@@ -22,7 +22,7 @@ export const createMateria = async (req, res) => {
   try {
     const [result] = await pool.query(
       "INSERT INTO materias (nombre, carrera, grado) VALUES (?, ?, ?)",
-      [nombre, clave]
+      [nombre, carrera, grado]
     );
     res.json({ ok: true, id: result.insertId, mensaje: "Materia agregada correctamente" });
   } catch (err) {
