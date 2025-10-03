@@ -13,15 +13,15 @@ export const getMaterias = async (req, res) => {
 
 // 🔹 Agregar una nueva materia
 export const createMateria = async (req, res) => {
-  const { nombre, clave } = req.body;
+  const { nombre, carrera, grado } = req.body;
 
   if (!nombre || !clave) {
-    return res.status(400).json({ ok: false, error: "Faltan campos: nombre y clave son requeridos" });
+    return res.status(400).json({ ok: false, error: "Faltan campos: nombre carrera y grado son requeridos" });
   }
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO materias (nombre, clave) VALUES (?, ?)",
+      "INSERT INTO materias (nombre, carrera, grado) VALUES (?, ?, ?)",
       [nombre, clave]
     );
     res.json({ ok: true, id: result.insertId, mensaje: "Materia agregada correctamente" });
