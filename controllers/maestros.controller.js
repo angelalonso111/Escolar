@@ -13,7 +13,7 @@ export const getMaestros = async (req, res) => {
 
 // 🔹 Agregar maestro nuevo
 export const createMaestro = async (req, res) => {
-  const { nombre, carrera, grado } = req.body;
+  const { nombre, edad, sexo, estatus, materiaAsignada } = req.body;
 
   if (!nombre || !carrera || !grado) {
     return res.status(400).json({ ok: false, error: "Faltan campos: nombre carrera y grado son requeridos" });
@@ -21,10 +21,10 @@ export const createMaestro = async (req, res) => {
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO materias (nombre, carrera, grado) VALUES (?, ?, ?)",
-      [nombre, carrera, grado]
+      "INSERT INTO maestros (nombre, edad, sexo,estatus,materiaAsignada) VALUES (?, ?, ?, ? ,?, ? )",
+      [nombre, edad, sexo, estatus, materiaAsignada]
     );
-    res.json({ ok: true, id: result.insertId, mensaje: "Materia agregada correctamente" });
+    res.json({ ok: true, id: result.insertId, mensaje: "Maestro agregado correctamente" });
   } catch (err) {
     console.error("❌ Error insertando materia:", err);
     res.status(500).json({ ok: false, error: err.message });
