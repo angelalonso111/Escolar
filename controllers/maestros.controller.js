@@ -15,7 +15,7 @@ export const getMaestros = async (req, res) => {
 export const createMaestros = async (req, res) => {
   const { nombre, edad, sexo, estatus, materiaAsignada } = req.body;
 
-  if (!nombre || !edad || !sexo || estatus || ) {
+  if (!nombre || !edad || !sexo || !estatus || ) {
     return res.status(400).json({ ok: false, error: "Faltan campos requeridos" });
   }
 
