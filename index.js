@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import alumnosRoutes from "./routes/alumnos.routes.js";
 import materiasRoutes from "./routes/materias.routes.js";
+import maestrosRoutes from "./routes/maestros.routes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.get("/ping", (req, res) => {
 // Rutas principales
 app.use("/alumnos", alumnosRoutes);
 app.use("/materias", materiasRoutes);
+app.use("/maestros", maestrosRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
