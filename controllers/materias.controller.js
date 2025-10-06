@@ -13,20 +13,49 @@ export const getMaterias = async (req, res) => {
 
 // 🔹 Agregar una nueva materia
 export const createMateria = async (req, res) => {
-  const { nombre, carrera, grado } = req.body;
-
-  if (!nombre || !carrera || !grado) {
-    return res.status(400).json({ ok: false, error: "Faltan campos: nombre carrera y grado son requeridos" });
-  }
-
   try {
-    const [result] = await pool.query(
-      "INSERT INTO materias (nombre, carrera, grado) VALUES (?, ?, ?)",
-      [nombre, carrera, grado]
-    );
-    res.json({ ok: true, id: result.insertId, mensaje: "Materia agregada correctamente" });
+    const materias = Array.isArray(req.body) ? req.body : [req.body]; // ✅ aceptar 1 o varias
+
+    // Validar que todas tengan los campos requeridos
+    for (const materia of materias) {
+      const { nombre, carrera, grado } = materia;
+      if (!nombre || !carrera || !grado) {
+        return res.status(400).json({
+          ok: false,
+          error: "Faltan campos: nombre carrera y grado son requeridos",
+        });
+      }
+    }
+
+    // Insertar todas las materias
+    const resultados = [];
+    for (const materia of materias) {
+      const { nombre, carrera, grado } = materia;
+
+      const [result] = await pool.query(
+        "INSERT INTO materias (nombre, carrera, grado) VALUES (?, ?, ?)",
+        [nombre, carrera, grado]
+      );
+
+      resultados.push({
+        id: result.insertId,
+        nombre,
+        carrera,
+        grado,
+      });
+    }
+
+    return res.json({
+      ok: true,
+      mensaje:
+        materias.length > 1
+          ? `✅ ${materias.length} materias agregadas correctamente`
+          : "✅ Materia agregada correctamente",
+      materias: resultados,
+    });
   } catch (err) {
     console.error("❌ Error insertando materia:", err);
-    res.status(500).json({ ok: false, error: err.message });
+    return res.status(500).json({ ok: false, error: err.message });
   }
 };
+
