@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", getMaterias);
 router.post("/", createMateria);
-router.post("/asignarMaterias", asignarMateriasAAlumno);
+router.post("/", asignarMateriasAAlumno);
 
 export default router;
