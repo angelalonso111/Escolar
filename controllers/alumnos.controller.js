@@ -19,8 +19,8 @@ export const createAlumno = async (req, res) => {
 
   try {
     const [result] = await pool.query(
-      "INSERT INTO alumnos (nombre, correo, apellido) VALUES (?, ?, ?)",
-      [nombre, correo, apellido]
+      "INSERT INTO alumnos (nombre, correo, apellido, foto_perfil) VALUES (?, ?, ?, ?)",
+      [nombre, correo, apellido, foto_perfil || null]
     );
     res.json({ ok: true, id: result.insertId, mensaje: "Alumno agregado correctamente" });
   } catch (err) {
@@ -60,5 +60,6 @@ export const createMaterias = async (req, res) => {
     res.status(500).json({ ok: false, error: err.message });
   }
 };
+
 
 
