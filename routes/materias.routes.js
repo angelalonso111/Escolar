@@ -10,10 +10,4 @@ router.post("/", asignarMateriasAAlumno);
 
 export default router;
 
-const router = Router();
 
-router.get("/", getMaterias);
-router.post("/", createMateria);
-router.post("/", asignarMateriasAAlumno);
-
-export default router;
