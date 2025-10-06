@@ -61,34 +61,37 @@ export const createMateria = async (req, res) => {
 
 export const asignarMateriasAAlumno = async (req, res) => {
   try {
-    const { alumno_id, materias } = req.body;
+    const { alumno, materias } = req.body; // 👈 usamos los nombres reales
 
-    if (!alumno_id || !Array.isArray(materias) || materias.length === 0) {
+    // Validaciones básicas
+    if (!alumno || !Array.isArray(materias) || materias.length === 0) {
       return res.status(400).json({
         ok: false,
-        error: "Faltan campos: alumno_id y materias son requeridos",
+        error: "Faltan campos: alumno y materias son requeridos",
       });
     }
 
     const resultados = [];
 
-    for (const idMateria of materias) {
+    for (const materia of materias) {
+      // Inserta cada relación alumno–materia
       const [result] = await pool.query(
-        "INSERT INTO asignacionMaterias (alumno, materia, estatus) VALUES (?, ?, ?)",
-        [alumno_id, idMateria, "Activo"]
+        `INSERT INTO asignacionMaterias (alumno, materia, estatus)
+         VALUES (?, ?, ?)`,
+        [alumno, materia, "Activo"]
       );
 
       resultados.push({
         id: result.insertId,
-        alumno: alumno_id,
-        materia: idMateria,
+        alumno,
+        materia,
         estatus: "Activo",
       });
     }
 
     return res.json({
       ok: true,
-      mensaje: `✅ ${materias.length} materia(s) asignadas correctamente al alumno ${alumno_id}`,
+      mensaje: `✅ ${materias.length} materia(s) asignadas correctamente al alumno ${alumno}`,
       asignaciones: resultados,
     });
   } catch (err) {
@@ -99,5 +102,6 @@ export const asignarMateriasAAlumno = async (req, res) => {
     });
   }
 };
+
 
 
