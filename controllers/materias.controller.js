@@ -76,7 +76,7 @@ export const asignarMateriasAAlumno = async (req, res) => {
     for (const materia of materias) {
       // Inserta cada relación alumno–materia
       const [result] = await pool.query(
-        `INSERT INTO asignacionMaterias (alumno, materia, estatus)
+        `INSERT INTO AsignacionMaterias (alumno, materia, estatus)
          VALUES (?, ?, ?)`,
         [alumno, materia, "Activo"]
       );
