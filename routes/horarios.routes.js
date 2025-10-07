@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { asignarHorario } from "../controllers/horarios.controller.js";
+import { asignarHorario, getHorariosPorAlumnos } from "../controllers/horarios.controller.js";
 
 const router = Router();
 
