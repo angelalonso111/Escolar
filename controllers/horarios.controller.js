@@ -56,3 +56,37 @@ const [conflictos] = await pool.query(
     res.status(500).json({ ok: false, error: err.message });
   }
 };
+
+export const getHorariosPorAlumno = async (req, res) => {
+  try {
+    const { alumno } = req.params;
+
+    const [rows] = await pool.query(
+      `
+      SELECT 
+        h.id AS id_horario,
+        a.nombre AS alumno,
+        m.nombre AS materia,
+        h.dia_semana,
+        h.hora_inicio,
+        h.hora_fin,
+        h.salon
+      FROM HorariosAsignacion h
+      INNER JOIN AsignacionMaterias am ON h.id_asignacion = am.id
+      INNER JOIN materias m ON am.materia = m.id
+      INNER JOIN alumnos a ON am.alumno = a.id
+      WHERE a.id = ?
+      ORDER BY 
+        FIELD(h.dia_semana, 'Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'),
+        h.hora_inicio;
+      `,
+      [alumno]
+    );
+
+    res.json({ ok: true, horarios: rows });
+  } catch (err) {
+    console.error("❌ Error al obtener horarios:", err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+};
+
