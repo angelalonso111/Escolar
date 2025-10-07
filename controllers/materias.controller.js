@@ -130,17 +130,10 @@ export const getAsignacionesPorAlumno = async (req, res) => {
   try {
     const { alumno } = req.params;
 
-    if (!alumno) {
-      return res.status(400).json({
-        ok: false,
-        error: "El parámetro 'alumno' es requerido",
-      });
-    }
-
     const [rows] = await pool.query(
       `
       SELECT 
-        am.id AS id_asignacion,
+        MIN(am.id) AS id_asignacion,  -- evita duplicados si hay varias asignaciones
         am.alumno,
         am.materia,
         m.nombre AS materia_nombre,
@@ -148,20 +141,19 @@ export const getAsignacionesPorAlumno = async (req, res) => {
       FROM AsignacionMaterias am
       INNER JOIN materias m ON am.materia = m.id
       WHERE am.alumno = ?
-        AND am.id NOT IN (
-          SELECT h.id_asignacion
-          FROM HorariosAsignacion h
-        )
+      GROUP BY am.alumno, am.materia, m.nombre, am.estatus
       ORDER BY m.nombre;
       `,
       [alumno]
     );
-    return res.json(rows);
+
+    res.json(rows);
   } catch (err) {
     console.error("❌ Error al obtener materias asignadas:", err);
     return res.status(500).json({ ok: false, error: err.message });
   }
 };
+
 
 
 
