@@ -125,5 +125,41 @@ export const asignarMateriasAAlumno = async (req, res) => {
   }
 };
 
+// 🔹 Obtener materias ya asignadas a un alumno
+export const getAsignacionesPorAlumno = async (req, res) => {
+  try {
+    const { alumno } = req.params;
+
+    if (!alumno) {
+      return res.status(400).json({
+        ok: false,
+        error: "El parámetro 'alumno' es requerido",
+      });
+    }
+
+    const [rows] = await pool.query(
+      `
+      SELECT 
+        am.id AS id_asignacion,
+        am.alumno,
+        am.materia,
+        m.nombre AS materia_nombre,
+        am.estatus
+      FROM AsignacionMaterias am
+      INNER JOIN materias m ON am.materia = m.id
+      WHERE am.alumno = ?
+      ORDER BY m.nombre;
+      `,
+      [alumno]
+    );
+
+    return res.json(rows);
+  } catch (err) {
+    console.error("❌ Error al obtener materias asignadas:", err);
+    return res.status(500).json({ ok: false, error: err.message });
+  }
+};
+
+
 
 
