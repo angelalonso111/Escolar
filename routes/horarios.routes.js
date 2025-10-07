@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { asignarHorario, getHorariosPorAlumnos } from "../controllers/horarios.controller.js";
+import { asignarHorario, getHorariosPorAlumno } from "../controllers/horarios.controller.js";
 
 const router = Router();
 
-router.get("/", asignarHorario);
+// POST → Asignar un nuevo horario
 router.post("/", asignarHorario);
+
+// GET → Obtener los horarios de un alumno
 router.get("/alumno/:alumno", getHorariosPorAlumno);
 
 export default router;
