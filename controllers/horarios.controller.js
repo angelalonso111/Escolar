@@ -18,22 +18,19 @@ export const asignarHorario = async (req, res) => {
 
     const alumno = asignacion[0].alumno;
 
-    // 2️⃣ Verificar conflictos
-    const [conflictos] = await pool.query(
-      `
-      SELECT COUNT(*) AS conflictos
-      FROM HorariosAsignacion ha
-      JOIN AsignacionMaterias am ON ha.id_asignacion = am.id
-      WHERE am.alumno = ?
-        AND ha.dia_semana = ?
-        AND (
-             (? BETWEEN ha.hora_inicio AND ha.hora_fin)
-             OR (? BETWEEN ha.hora_inicio AND ha.hora_fin)
-             OR (ha.hora_inicio BETWEEN ? AND ?)
-           )
-      `,
-      [alumno, dia_semana, hora_inicio, hora_fin, hora_inicio, hora_fin]
-    );
+// 2️⃣ Verificar conflictos
+const [conflictos] = await pool.query(
+  `
+  SELECT COUNT(*) AS conflictos
+  FROM HorariosAsignacion ha
+  JOIN AsignacionMaterias am ON ha.id_asignacion = am.id
+  WHERE am.alumno = ?
+    AND ha.dia_semana = ?
+    AND (ha.hora_inicio < ? AND ha.hora_fin > ?)
+  `,
+  [alumno, dia_semana, hora_fin, hora_inicio]
+);
+
 
     if (conflictos[0].conflictos > 0) {
       return res.status(400).json({
