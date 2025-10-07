@@ -1,15 +1,40 @@
 import { pool } from "../config/db.js";
 
 // 🔹 Obtener todas las materias
+import { pool } from "../config/db.js";
+
+// 🔹 Obtener todas las materias (o solo las no asignadas a un alumno)
 export const getMaterias = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM materias");
-    res.json(rows);
+    const { alumno } = req.query;
+
+    if (alumno) {
+      // 🔸 Filtrar materias NO asignadas al alumno
+      const [rows] = await pool.query(
+        `
+        SELECT m.*
+        FROM materias m
+        WHERE m.id NOT IN (
+          SELECT am.materia
+          FROM AsignacionMaterias am
+          WHERE am.alumno = ?
+        )
+        `,
+        [alumno]
+      );
+
+      return res.json(rows);
+    } else {
+      // 🔸 Si no se especifica alumno, devolver todas
+      const [rows] = await pool.query("SELECT * FROM materias");
+      return res.json(rows);
+    }
   } catch (err) {
     console.error("❌ Error al obtener materias:", err);
     res.status(500).json({ ok: false, error: err.message });
   }
 };
+
 
 // 🔹 Agregar una nueva materia
 export const createMateria = async (req, res) => {
