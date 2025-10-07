@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { asignarHorarios } from "../controllers/horarios.controller.js";
+import { asignarHorario } from "../controllers/horarios.controller.js";
 
 const router = Router();
 
-router.get("/", asignarHorarios);
-router.post("/", asignarHorarios);
+router.get("/", asignarHorario);
+router.post("/", asignarHorario);
 
 export default router;
