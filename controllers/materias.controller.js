@@ -1,8 +1,5 @@
 import { pool } from "../config/db.js";
 
-// 🔹 Obtener todas las materias
-import { pool } from "../config/db.js";
-
 // 🔹 Obtener todas las materias (o solo las no asignadas a un alumno)
 export const getMaterias = async (req, res) => {
   try {
