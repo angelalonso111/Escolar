@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", asignarHorario);
 router.post("/", asignarHorario);
-router.get("/horarios/alumno/:alumno", getHorariosPorAlumno);
+router.get("/alumno/:alumno", getHorariosPorAlumno);
 
 export default router;
